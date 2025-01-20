@@ -1,0 +1,22 @@
+{
+  "name": "sortstars",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RichardSouzza/SortStars.git"
+  },
+  "author": "Richard Souza",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RichardSouzza/SortStars/issues"
+  },
+  "dependencies": {
+    "@octokit/core": "^6.1.2",
+    "dotenv": "^16.4.5"
+  }
+}
