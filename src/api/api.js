@@ -1,24 +1,35 @@
+import Unauthorized from "../exceptions/Unauthorized.js";
+
 export async function getStaredRepositories(octokit) {
   let staredRepositories = [];
   let page = 1;
-  let pagesRemaining = true;
 
-  while (pagesRemaining) {
-    const response = await octokit.request("GET /user/starred", {
-      direction: "asc",
-      per_page: 100,
-      page: page,
-      headers: {
-        "X-GitHub-Api-Version": "2022-11-28",
-      }
-    })
+  while (true) {
+    try {
+      const response = await octokit.request("GET /user/starred", {
+        direction: "asc",
+        per_page: 100,
+        page: page,
+        headers: {
+          "X-GitHub-Api-Version": "2022-11-28",
+        }
+      });
     
-    if (response.data.length == 0) {
-      break
+      if (response.data.length == 0) {
+        break;
+      }
+      
+      staredRepositories.push(...response.data);
+      page += 1;
     }
     
-    staredRepositories.push(...response.data)
-    page += 1;
+    catch (error) {
+      if (error.name === "HttpError") {
+        throw new Unauthorized();
+      } else {
+        throw error;
+      }
+    }
   }
 
   return staredRepositories;
@@ -42,7 +53,7 @@ export async function starRepository(octokit, owner, repo) {
     headers: {
       "X-GitHub-Api-Version": "2022-11-28"
     }
-  })
+  });
   return response;
 }
 
@@ -54,6 +65,6 @@ export async function unstarRepository(octokit, owner, repo) {
     headers: {
       "X-GitHub-Api-Version": "2022-11-28"
     }
-  })
+  });
   return response;
 }
